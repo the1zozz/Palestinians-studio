@@ -344,6 +344,10 @@ export class StarFieldComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly hoverInfo   = signal<HoverInfo | null>(null);
   readonly aboutOpen   = signal(false);
+  readonly muted       = signal(true);
+
+  private audio!: HTMLAudioElement;
+  private fadeInterval: ReturnType<typeof setInterval> | null = null;
 
   private ps!: ParticleSystem;
   private rafId = 0;
@@ -352,6 +356,7 @@ export class StarFieldComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.dataService.load();
+    this.initAudio();
   }
 
   ngAfterViewInit(): void {
@@ -410,6 +415,42 @@ export class StarFieldComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleAbout(): void {
     this.aboutOpen.update(v => !v);
+  }
+
+  // ─── Audio ──────────────────────────────────────────────────────────────────
+
+  private initAudio(): void {
+    this.audio = new Audio(`${this.baseHref}audio.m4a`);
+    this.audio.loop   = true;
+    this.audio.volume = 0;
+  }
+
+  toggleMute(): void {
+    if (this.muted()) {
+      // Unmute — start playing and fade in
+      this.muted.set(false);
+      this.audio.play().catch(() => {});
+      this.fadeTo(0.35);
+    } else {
+      // Mute — fade out then pause
+      this.muted.set(true);
+      this.fadeTo(0, () => this.audio.pause());
+    }
+  }
+
+  private fadeTo(target: number, onDone?: () => void): void {
+    if (this.fadeInterval) clearInterval(this.fadeInterval);
+    this.fadeInterval = setInterval(() => {
+      const diff = target - this.audio.volume;
+      if (Math.abs(diff) < 0.01) {
+        this.audio.volume = target;
+        clearInterval(this.fadeInterval!);
+        this.fadeInterval = null;
+        onDone?.();
+      } else {
+        this.audio.volume = Math.min(1, Math.max(0, this.audio.volume + diff * 0.1));
+      }
+    }, 30);
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -471,5 +512,7 @@ export class StarFieldComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     cancelAnimationFrame(this.rafId);
     this.resizeObserver?.disconnect();
+    if (this.fadeInterval) clearInterval(this.fadeInterval);
+    this.audio?.pause();
   }
 }
