@@ -1,0 +1,131 @@
+<!-- Background image layer -->
+<div class="bg-layer" aria-hidden="true"></div>
+
+<!-- WebGL canvas -->
+<canvas
+  #glCanvas
+  class="star-canvas"
+  (mousemove)="onMouseMove($event)"
+  (mouseleave)="onMouseLeave()"
+  (touchmove)="onTouchMove($event)"
+  aria-label="Memorial star field — each star is a Palestinian life"
+></canvas>
+
+<!-- Header -->
+<header class="site-header" aria-label="Site header">
+  <h1 class="site-title">Remember their names</h1>
+  <p class="site-subtitle">
+    We know the names of <span class="count-badge">{{ totalCount() | number }}</span> Palestinians
+    killed in Gaza. Thousands more remain unidentified, unrecoverable, or unknown.
+  </p>
+  <p class="site-date">7 Oct 2023 — 31 Jul 2025</p>
+  <p class="site-tagline">each star is a soal</p>
+</header>
+
+<!-- Top-right action buttons -->
+<div class="top-buttons" aria-label="Actions">
+  <a
+    class="icon-btn"
+    href="https://www.facebook.com/zozz17"
+    target="_blank"
+    rel="noopener"
+    aria-label="Facebook profile"
+    title="Facebook profile"
+  >
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+    </svg>
+  </a>
+  <button
+    class="icon-btn"
+    [class.active]="aboutOpen()"
+    (click)="toggleAbout()"
+    aria-label="About this page"
+    title="About this page"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="8" stroke-width="3" stroke-linecap="round"/>
+      <line x1="12" y1="12" x2="12" y2="16"/>
+    </svg>
+  </button>
+</div>
+
+<!-- About panel -->
+@if (aboutOpen()) {
+  <div class="side-panel about-panel" role="dialog" aria-label="About this page">
+    <div class="panel-header">
+      <span class="panel-title">About</span>
+      <button class="panel-close" (click)="toggleAbout()" aria-label="Close about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="panel-body">
+      <p>This visual shows the names of <strong>{{ totalCount() | number }}</strong> Palestinians killed by Israeli forces in Gaza from 7 Oct 2023 to 31 Jul 2025.</p>
+      <p>This staggering figure includes only those whose names and ages could be identified by the Ministry of Health in Gaza. Thousands of people remain unidentified because their bodies are damaged beyond recognition, they have no surviving family to identify them, or the Ministry of Health in Gaza has been unable to recover their bodies amid the ongoing genocide.
+</p>
+      <p>Each star represents one life. Hover over a star to see their name.</p>
+      <p class="panel-source">The names were translated by <a href="https://iraqbodycount.org/" target="_blank" rel="noopener">Iraq Body Count</a> We are grateful for their work.</p>
+    </div>
+  </div>
+}
+
+<!-- Loading overlay -->
+@if (loading()) {
+  <div class="loading-overlay" role="status" aria-live="polite">
+    <div class="loading-inner">
+      <div class="loading-stars">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <p class="loading-text">Loading {{ totalCount() | number }} lives…</p>
+      <div class="loading-bar-track">
+        <div class="loading-bar-fill" [style.width.%]="loadProgress()"></div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Hover info card -->
+@if (hoverInfo(); as info) {
+  <div
+    class="info-card"
+    role="tooltip"
+    [style.left.px]="info.x"
+    [style.top.px]="info.y"
+    aria-live="polite"
+  >
+    <div class="info-card-inner">
+      <div class="info-gender-icon" [class.female]="info.martyr.s === 'f'">
+        @if (info.martyr.s === 'f') {
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="12" cy="5" r="3.5"/>
+            <path d="M12 9.5c-3 0-5.5 1.5-5.5 4v2h11v-2c0-2.5-2.5-4-5.5-4z"/>
+            <path d="M8.5 15.5v5h7v-5"/>
+          </svg>
+        } @else {
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="12" cy="5" r="3.5"/>
+            <path d="M12 9.5c-3 0-5.5 1.5-5.5 4v7h11v-7c0-2.5-2.5-4-5.5-4z"/>
+          </svg>
+        }
+      </div>
+      <div class="info-details">
+        <p class="info-name-en">{{ info.martyr.n }}</p>
+        <p class="info-name-ar">{{ info.martyr.a }}</p>
+        <div class="info-meta">
+          <span class="info-age">Age: {{ formatAge(info.martyr.g) }}</span>
+          @if (info.martyr.b) {
+            <span class="info-born">Born: {{ formatDate(info.martyr.b) }}</span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Footer -->
+<footer class="site-footer" aria-label="Site footer">
+  <p>Hover over a star to remember them · Move your cursor across the sky</p>
+</footer>

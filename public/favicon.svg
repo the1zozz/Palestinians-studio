@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Palestinian flag stripes -->
+  <rect width="32" height="32" rx="4" fill="#000"/>
+  <rect y="0"  width="32" height="10.6" rx="0" fill="#000"/>
+  <rect y="10.6" width="32" height="10.8" fill="#fff"/>
+  <rect y="21.4" width="32" height="10.6" fill="#009736"/>
+  <!-- Red triangle -->
+  <polygon points="0,0 14,16 0,32" fill="#ce1126"/>
+  <!-- Small star in centre -->
+  <polygon points="16,12 17.2,15.2 20.5,15.2 17.9,17.1 18.9,20.3 16,18.5 13.1,20.3 14.1,17.1 11.5,15.2 14.8,15.2"
+           fill="#fff" opacity="0.9"/>
+</svg>

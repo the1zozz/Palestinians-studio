@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://the1zozz.github.io/Palestinians-studio/sitemap.xml
