@@ -418,7 +418,7 @@
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .site-header {
-    padding: 28px 20px 32px;
+    padding: 72px 20px 32px;
     max-width: 100%;
   }
 
