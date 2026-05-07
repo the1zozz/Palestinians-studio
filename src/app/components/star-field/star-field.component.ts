@@ -11,6 +11,7 @@ import {
   NgZone,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 import { MartyrsDataService, Martyr } from '../../services/martyrs-data.service';
 
 // ─── WebGL Shaders ────────────────────────────────────────────────────────────
@@ -333,6 +334,9 @@ export class StarFieldComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private dataService = inject(MartyrsDataService);
   private zone        = inject(NgZone);
+  private baseHref    = inject(APP_BASE_HREF, { optional: true }) ?? '/';
+
+  readonly bgStyle = `url('${this.baseHref}palastine.jpg')`;
 
   readonly loading     = this.dataService.loading;
   readonly loadProgress = this.dataService.loadProgress;

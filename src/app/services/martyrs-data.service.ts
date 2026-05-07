@@ -18,7 +18,7 @@ export class MartyrsDataService {
   constructor(private http: HttpClient) {}
 
   load(): void {
-    this.http.get<Martyr[]>('/data.json').subscribe({
+    this.http.get<Martyr[]>('data.json').subscribe({
       next: (data) => {
         this.martyrs.set(data);
         this.loading.set(false);

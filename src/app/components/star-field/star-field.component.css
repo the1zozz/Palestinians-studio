@@ -13,11 +13,9 @@
 .bg-layer {
   position: absolute;
   inset: 0;
-  background-image: url('/palastine.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* Dark overlay so stars pop */
   filter: brightness(0.28) saturate(0.7);
   z-index: 0;
 }
